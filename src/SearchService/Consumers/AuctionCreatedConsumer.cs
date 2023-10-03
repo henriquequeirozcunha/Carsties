@@ -21,6 +21,12 @@ public class AuctionCreatedConsumer : IConsumer<AuctionCreated>
 
         var item = _mapper.Map<Item>(context.Message);
 
+        if (item.Model == "ERRORMODEL")
+        {
+            throw new ArgumentException("Fake exception");
+        }
+
+
         await item.SaveAsync();
     }
 }

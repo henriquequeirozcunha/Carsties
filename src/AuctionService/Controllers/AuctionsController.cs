@@ -103,6 +103,12 @@ public class AuctionsController : ControllerBase
         auction.Item.Mileage = updateAuctionDto.Mileage ?? auction.Item.Mileage;
         auction.Item.Year = updateAuctionDto.Year ?? auction.Item.Year;
 
+        // NOTE: THIS HAS TO BE BEFORE THE SAVECHANGES. IF SOMETHING WRONG HAPPENS
+        // WITH SAVE CHANGES. IT STILL SAVE ON OUTBOX STRATEGY. WHEN SERVICE BUS GOES BACK
+        // IT WILL BE SENT TO SERVICE AND THE MESSAGE GETS DELIVERED TO SEACHSERVICE VIA
+        // RABBITMQ.
+        await _publishEndpoint.Publish(_mapper.Map<AuctionUpdated>(auction));
+
         var result = await _context.SaveChangesAsync() > 0;
 
         if (result) return Ok();
@@ -111,7 +117,7 @@ public class AuctionsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult> DeleAuction(Guid id)
+    public async Task<ActionResult> DeleteAuction(Guid id)
     {
         var auction = await _context.Auctions.FindAsync(id);
 
@@ -120,6 +126,8 @@ public class AuctionsController : ControllerBase
         // TODO: check seller == username
 
         _context.Auctions.Remove(auction);
+
+        await _publishEndpoint.Publish(new AuctionDeleted{ Id = auction.Id.ToString() });
 
         var result = await _context.SaveChangesAsync() > 0;
 
