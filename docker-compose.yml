@@ -25,7 +25,7 @@ services:
       - 15672:15672
 
   auction-svc:
-    image: henriquequeirozcunha/action-svc:latest
+    image: henriquequeirozcunha/auction-svc:latest
     build:
       context: .
       dockerfile: src/AuctionService/Dockerfile
@@ -39,6 +39,23 @@ services:
       - 7001:80
     depends_on:
       - postgres-carsties
+      - rabbitmq
+
+  search-svc:
+    image: henriquequeirozcunha/search-svc:latest
+    build:
+      context: .
+      dockerfile: src/SearchService/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - RabbitMq__Host=rabbitmq
+      - ConnectionStrings__MongoDbConnection=mongodb://root:mongopw@localhost
+      - AuctionServiceUrl=http://auction-svc
+    ports:
+      - 7002:80
+    depends_on:
+      - mongodb
       - rabbitmq
 
 volumes:
