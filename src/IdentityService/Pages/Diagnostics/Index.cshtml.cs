@@ -10,17 +10,17 @@ namespace IdentityService.Pages.Diagnostics;
 public class Index : PageModel
 {
     public ViewModel View { get; set; }
-        
+
     public async Task<IActionResult> OnGet()
     {
-        var localAddresses = new string[] { "127.0.0.1", "::1", HttpContext.Connection.LocalIpAddress.ToString() };
+        var localAddresses = new string[] { "::ffff:172.22.0.1", "127.0.0.1", "::1", HttpContext.Connection.LocalIpAddress.ToString() };
         if (!localAddresses.Contains(HttpContext.Connection.RemoteIpAddress.ToString()))
         {
             return NotFound();
         }
 
         View = new ViewModel(await HttpContext.AuthenticateAsync());
-            
+
         return Page();
     }
 }
