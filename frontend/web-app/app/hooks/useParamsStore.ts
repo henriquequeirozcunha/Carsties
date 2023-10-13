@@ -6,6 +6,12 @@ export enum OrderByOptions {
   new = 'new',
 }
 
+export enum FilterByOptions {
+  live = 'live',
+  endingSoon = 'endingSoon',
+  finished = 'finished',
+}
+
 type State = {
   pageNumber: number
   pageSize: number
@@ -13,6 +19,7 @@ type State = {
   searchTerm: string
   searchValue: string
   orderBy: string
+  filterBy: string
 }
 
 type Actions = {
@@ -28,6 +35,7 @@ const initialState: State = {
   searchTerm: '',
   searchValue: '',
   orderBy: OrderByOptions.new,
+  filterBy: FilterByOptions.live,
 }
 
 export const useParamsStore = create<State & Actions>()((set) => ({
