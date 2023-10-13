@@ -9,6 +9,7 @@ import Filters from './Filters'
 import { PaginatedResult } from '@/models/paginatedResult'
 import { useParamsStore } from '../hooks/useParamsStore'
 import { shallow } from 'zustand/shallow'
+import EmptyFilter from '../components/EmptyFilter'
 
 function Listings() {
   const [data, setData] = useState<PaginatedResult<Auction>>()
@@ -39,20 +40,26 @@ function Listings() {
   return (
     <>
       <Filters />
-      <div className='grid grid-cols-4 gap-6'>
-        {data.results &&
-          data.results.map((auction) => (
-            <AuctionCard auction={auction} key={auction.id} />
-          ))}
-      </div>
+      {data.totalCount === 0 ? (
+        <EmptyFilter showReset />
+      ) : (
+        <>
+          <div className='grid grid-cols-4 gap-6'>
+            {data.results &&
+              data.results.map((auction) => (
+                <AuctionCard auction={auction} key={auction.id} />
+              ))}
+          </div>
 
-      <div className='flex  justify-center mt-4'>
-        <AppPagination
-          pageChanged={(page) => setPageNumber(page)}
-          currentPage={params.pageNumber}
-          pageCount={data.pageCount}
-        />
-      </div>
+          <div className='flex  justify-center mt-4'>
+            <AppPagination
+              pageChanged={(page) => setPageNumber(page)}
+              currentPage={params.pageNumber}
+              pageCount={data.pageCount}
+            />
+          </div>
+        </>
+      )}
     </>
   )
 }
