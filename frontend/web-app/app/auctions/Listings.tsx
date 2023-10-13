@@ -9,7 +9,6 @@ import Filters from './Filters'
 import { PaginatedResult } from '@/models/paginatedResult'
 import { useParamsStore } from '../hooks/useParamsStore'
 import { shallow } from 'zustand/shallow'
-import qs from 'query-string'
 
 function Listings() {
   const [data, setData] = useState<PaginatedResult<Auction>>()
@@ -18,6 +17,7 @@ function Listings() {
       pageNumber: state.pageNumber,
       pageSize: state.pageSize,
       searchTerm: state.searchTerm,
+      orderBy: state.orderBy,
     }),
     shallow
   )

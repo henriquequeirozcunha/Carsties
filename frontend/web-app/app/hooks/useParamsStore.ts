@@ -1,11 +1,18 @@
 import { create } from 'zustand'
 
+export enum OrderByOptions {
+  make = 'make',
+  endingSoon = 'endingSoon',
+  new = 'new',
+}
+
 type State = {
   pageNumber: number
   pageSize: number
   pageCount: number
   searchTerm: string
   searchValue: string
+  orderBy: string
 }
 
 type Actions = {
@@ -20,6 +27,7 @@ const initialState: State = {
   pageCount: 1,
   searchTerm: '',
   searchValue: '',
+  orderBy: OrderByOptions.new,
 }
 
 export const useParamsStore = create<State & Actions>()((set) => ({
