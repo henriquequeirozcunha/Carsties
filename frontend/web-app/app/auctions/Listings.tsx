@@ -6,29 +6,41 @@ import { useEffect, useState } from 'react'
 import { Auction } from '@/models/auction'
 import { getAuctions } from '../services/auction'
 import Filters from './Filters'
+import { PaginatedResult } from '@/models/paginatedResult'
+import { useParamsStore } from '../hooks/useParamsStore'
+import { shallow } from 'zustand/shallow'
+import qs from 'query-string'
 
 function Listings() {
-  const [auctions, setAuctions] = useState<Auction[]>([])
-  const [pageCount, setPageCount] = useState(0)
-  const [pageNumber, setPageNumber] = useState(1)
-  const [pageSize, setPageSize] = useState(4)
+  const [data, setData] = useState<PaginatedResult<Auction>>()
+  const params = useParamsStore(
+    (state) => ({
+      pageNumber: state.pageNumber,
+      pageSize: state.pageSize,
+      searchTerm: state.searchTerm,
+    }),
+    shallow
+  )
+  const setParams = useParamsStore((state) => state.setParams)
+
+  function setPageNumber(pageNumber: number) {
+    setParams({ pageNumber })
+  }
 
   useEffect(() => {
-    getAuctions({ pageNumber, pageSize }).then((data) => {
-      setAuctions(data.results)
-
-      setPageCount(data.pageCount)
+    getAuctions(params).then((data) => {
+      setData(data)
     })
-  }, [pageNumber, pageSize])
+  }, [params])
 
-  if (!auctions.length) return <h3>Loading...</h3>
+  if (!data) return <h3>Loading...</h3>
 
   return (
     <>
-      <Filters pageSize={pageSize} setPageSize={setPageSize} />
+      <Filters />
       <div className='grid grid-cols-4 gap-6'>
-        {auctions &&
-          auctions.map((auction) => (
+        {data.results &&
+          data.results.map((auction) => (
             <AuctionCard auction={auction} key={auction.id} />
           ))}
       </div>
@@ -36,8 +48,8 @@ function Listings() {
       <div className='flex  justify-center mt-4'>
         <AppPagination
           pageChanged={(page) => setPageNumber(page)}
-          currentPage={1}
-          pageCount={pageCount}
+          currentPage={params.pageNumber}
+          pageCount={data.pageCount}
         />
       </div>
     </>
