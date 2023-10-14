@@ -12,6 +12,7 @@
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "flowbite-react": "^0.6.4",
     "next": "13.5.4",
+    "next-auth": "^4.23.2",
     "query-string": "^8.1.0",
     "react": "^18",
     "react-countdown": "^2.3.5",
