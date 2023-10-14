@@ -17,7 +17,7 @@ async function Navbar() {
     >
       <Logo />
       <Search />
-      {user ? <UserActions /> : <LoginButton />}
+      {user ? <UserActions user={user} /> : <LoginButton />}
     </header>
   )
 }
