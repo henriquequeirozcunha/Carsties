@@ -16,13 +16,16 @@
     "query-string": "^8.1.0",
     "react": "^18",
     "react-countdown": "^2.3.5",
+    "react-datepicker": "^4.21.0",
     "react-dom": "^18",
+    "react-hook-form": "^7.47.0",
     "react-icons": "^4.11.0",
     "zustand": "^4.4.3"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
+    "@types/react-datepicker": "^4.19.1",
     "@types/react-dom": "^18",
     "autoprefixer": "^10",
     "eslint": "^8",
