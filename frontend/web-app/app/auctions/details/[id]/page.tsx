@@ -5,6 +5,7 @@ import CarImage from '../../CarImage'
 import DetailedSpecs from './DetailedSpecs'
 import { getCurrentUser } from '../../authActions'
 import EditButton from './EditButton'
+import DeleteButton from './DeleteButton'
 
 type DetailsProps = {
   id: string
@@ -20,7 +21,12 @@ async function Details({ params }: { params: DetailsProps }) {
         <div className='flex items-center gap-3'>
           <Heading title={`${data.make} ${data.model}`} />
 
-          {user?.username === data.seller && <EditButton id={data.id} />}
+          {user?.username === data.seller && (
+            <>
+              <EditButton id={data.id} />
+              <DeleteButton id={data.id} />
+            </>
+          )}
         </div>
 
         <div className='flex gap-3'>
