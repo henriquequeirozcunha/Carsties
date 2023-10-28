@@ -7,6 +7,7 @@ import { useEffect } from 'react'
 import DateInput from '../components/DateInput'
 import { createAuction } from '../services/auction'
 import { useRouter } from 'next/navigation'
+import toast from 'react-hot-toast/headless'
 
 type CreateAuctionDto = {
   make: string
@@ -42,8 +43,9 @@ function AuctionForm() {
       }
 
       router.push(`/auctions/details/${res.id}`)
-    } catch (error) {
-      console.log('error', error)
+    } catch (error: any) {
+      console.log('aaa', error)
+      toast.error(error.status + '' + error.message)
     }
   }
 
@@ -51,7 +53,7 @@ function AuctionForm() {
     <form className='flex flex-col mt-3' onSubmit={handleSubmit(onSubmit)}>
       <Input
         label='Make'
-        name='make'
+        name='name'
         control={control}
         rules={{ required: 'Make is required' }}
       />
