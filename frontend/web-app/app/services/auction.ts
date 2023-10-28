@@ -5,6 +5,7 @@ import { PaginatedResult } from '@/models/paginatedResult'
 import qs from 'query-string'
 import { fetchWrapper } from '@/lib/fetchWrapper'
 import { FieldValues } from 'react-hook-form'
+import { revalidatePath } from 'next/cache'
 
 type getAuctionsDto = {
   pageNumber: number
@@ -36,4 +37,12 @@ export async function createAuction(data: FieldValues) {
 
 export async function getDetailedViewData(id: string): Promise<Auction> {
   return await fetchWrapper.get(`auctions/${id}`)
+}
+
+export async function updateAuction(id: string, data: FieldValues) {
+  const res = await fetchWrapper.put(`auctions/${id}`, data)
+
+  revalidatePath(`auctions/${id}`)
+
+  return res
 }
