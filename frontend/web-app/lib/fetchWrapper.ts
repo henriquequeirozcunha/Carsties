@@ -71,9 +71,11 @@ async function handleResponse(response: Response) {
     const error = {
       status: response.status,
       message: response.statusText,
+      errors: data.errors,
+      title: data.title,
     }
 
-    return error
+    return { error }
   }
 }
 

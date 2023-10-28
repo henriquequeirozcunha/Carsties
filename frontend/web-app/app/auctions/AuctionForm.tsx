@@ -5,6 +5,8 @@ import { FieldValues, useForm } from 'react-hook-form'
 import Input from '../components/Input'
 import { useEffect } from 'react'
 import DateInput from '../components/DateInput'
+import { createAuction } from '../services/auction'
+import { useRouter } from 'next/navigation'
 
 type CreateAuctionDto = {
   make: string
@@ -17,11 +19,12 @@ type CreateAuctionDto = {
 }
 
 function AuctionForm() {
+  const router = useRouter()
   const {
     control,
     handleSubmit,
     setFocus,
-    formState: { isSubmitting, isValid, isDirty },
+    formState: { isSubmitting, isValid },
   } = useForm({
     mode: 'onTouched',
   })
@@ -30,15 +33,25 @@ function AuctionForm() {
     setFocus('make')
   }, [setFocus])
 
-  function onSubmit(data: FieldValues) {
-    console.log(data)
+  async function onSubmit(data: FieldValues) {
+    try {
+      const res = await createAuction(data)
+
+      if (res.error) {
+        throw res.error
+      }
+
+      router.push(`/auctions/details/${res.id}`)
+    } catch (error) {
+      console.log('error', error)
+    }
   }
 
   return (
     <form className='flex flex-col mt-3' onSubmit={handleSubmit(onSubmit)}>
       <Input
         label='Make'
-        name='name'
+        name='make'
         control={control}
         rules={{ required: 'Make is required' }}
       />
@@ -106,6 +119,7 @@ function AuctionForm() {
         </Button>
         <Button
           isProcessing={isSubmitting}
+          disabled={!isValid}
           type='submit'
           outline
           color='success'
