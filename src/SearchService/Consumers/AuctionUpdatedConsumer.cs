@@ -4,7 +4,7 @@ using MassTransit;
 using MongoDB.Entities;
 using SearchService.Models;
 
-namespace SearchService;
+namespace SearchService.Consumers;
 
 public class AuctionUpdatedConsumer : IConsumer<AuctionUpdated>
 {

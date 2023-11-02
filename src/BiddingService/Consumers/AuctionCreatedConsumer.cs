@@ -2,7 +2,7 @@
 using MassTransit;
 using MongoDB.Entities;
 
-namespace BiddingService;
+namespace BiddingService.Consumers;
 
 public class AuctionCreatedConsumer : IConsumer<AuctionCreated>
 {
