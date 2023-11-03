@@ -3,16 +3,16 @@
 import AuctionCard from './AuctionCard'
 import AppPagination from '../components/AppPagination'
 import { useEffect, useState } from 'react'
-import { Auction } from '@/models/auction'
 import { getAuctions } from '../services/auction'
 import Filters from './Filters'
-import { PaginatedResult } from '@/models/paginatedResult'
 import { useParamsStore } from '../hooks/useParamsStore'
 import { shallow } from 'zustand/shallow'
 import EmptyFilter from '../components/EmptyFilter'
+import { useAuctionStore } from '../hooks/useAuctionStore'
 
 function Listings() {
-  const [data, setData] = useState<PaginatedResult<Auction>>()
+  const [loading, setLoading] = useState(true)
+
   const params = useParamsStore(
     (state) => ({
       pageNumber: state.pageNumber,
@@ -27,17 +27,28 @@ function Listings() {
   )
   const setParams = useParamsStore((state) => state.setParams)
 
+  const data = useAuctionStore(
+    (state) => ({
+      auctions: state.auctions,
+      totalCount: state.totalCount,
+      pageCount: state.pageCount,
+    }),
+    shallow
+  )
+  const setData = useAuctionStore((state) => state.setData)
+
   function setPageNumber(pageNumber: number) {
     setParams({ pageNumber })
   }
 
   useEffect(() => {
     getAuctions(params).then((data) => {
+      setLoading(false)
       setData(data)
     })
-  }, [params])
+  }, [params, setData])
 
-  if (!data) return <h3>Loading...</h3>
+  if (loading) return <h3>Loading...</h3>
 
   return (
     <>
@@ -47,8 +58,8 @@ function Listings() {
       ) : (
         <>
           <div className='grid grid-cols-4 gap-6'>
-            {data.results &&
-              data.results.map((auction) => (
+            {data.auctions &&
+              data.auctions.map((auction) => (
                 <AuctionCard auction={auction} key={auction.id} />
               ))}
           </div>
