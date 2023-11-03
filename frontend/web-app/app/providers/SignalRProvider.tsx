@@ -6,9 +6,11 @@ import { useAuctionStore } from '../hooks/useAuctionStore'
 import { useBidStore } from '../hooks/useBidStore'
 import { Bid } from '@/models/bid'
 import { User } from 'next-auth'
-import { Auction } from '@/models/auction'
+import { Auction, AuctionFinished } from '@/models/auction'
 import toast from 'react-hot-toast'
 import AuctionCreatedToast from '../components/AuctionCreatedToast'
+import { getDetailedViewData } from '../services/auction'
+import AuctionFinishedToast from '../components/AuctionFinishedToast'
 
 type SignalRProviderProps = {
   children: React.ReactNode
@@ -51,6 +53,28 @@ function SignalRProvider({ children, user }: SignalRProviderProps) {
               })
             }
           })
+
+          connection.on(
+            'AuctionFinished',
+            (finishedAuction: AuctionFinished) => {
+              const auction = getDetailedViewData(finishedAuction.auctionId)
+
+              return toast.promise(
+                auction,
+                {
+                  loading: 'Loading',
+                  success: (auction) => (
+                    <AuctionFinishedToast
+                      finishedAuction={finishedAuction}
+                      auction={auction}
+                    />
+                  ),
+                  error: (err) => 'Auction Finished',
+                },
+                { success: { duration: 10000, icon: null } }
+              )
+            }
+          )
         })
         .catch((error) => console.log(error))
     }
