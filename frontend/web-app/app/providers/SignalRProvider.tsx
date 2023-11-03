@@ -5,12 +5,17 @@ import { useEffect, useState } from 'react'
 import { useAuctionStore } from '../hooks/useAuctionStore'
 import { useBidStore } from '../hooks/useBidStore'
 import { Bid } from '@/models/bid'
+import { User } from 'next-auth'
+import { Auction } from '@/models/auction'
+import toast from 'react-hot-toast'
+import AuctionCreatedToast from '../components/AuctionCreatedToast'
 
 type SignalRProviderProps = {
   children: React.ReactNode
+  user: User | null
 }
 
-function SignalRProvider({ children }: SignalRProviderProps) {
+function SignalRProvider({ children, user }: SignalRProviderProps) {
   const [connection, setConnection] = useState<HubConnection | null>(null)
   const setCurrentPrice = useAuctionStore((state) => state.setCurrentPrice)
   const addBid = useBidStore((state) => state.addBid)
@@ -38,6 +43,14 @@ function SignalRProvider({ children }: SignalRProviderProps) {
 
             addBid(bid)
           })
+
+          connection.on('AuctionCreated', (auction: Auction) => {
+            if (user?.username !== auction.seller) {
+              return toast(<AuctionCreatedToast auction={auction} />, {
+                duration: 10000,
+              })
+            }
+          })
         })
         .catch((error) => console.log(error))
     }
@@ -45,7 +58,7 @@ function SignalRProvider({ children }: SignalRProviderProps) {
     return () => {
       connection?.stop()
     }
-  }, [connection, setCurrentPrice])
+  }, [addBid, connection, setCurrentPrice, user?.username])
 
   return children
 }
