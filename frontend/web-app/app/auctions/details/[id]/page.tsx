@@ -1,12 +1,11 @@
 import Heading from '@/app/components/Heading'
-import { getBidsForAuction, getDetailedViewData } from '@/app/services/auction'
+import { getDetailedViewData } from '@/app/services/auction'
 import CountdownTimer from '../../CountdownTimer'
 import CarImage from '../../CarImage'
 import DetailedSpecs from './DetailedSpecs'
 import { getCurrentUser } from '../../authActions'
 import EditButton from './EditButton'
 import DeleteButton from './DeleteButton'
-import BidItem from './BidItem'
 import BidList from './BidList'
 
 type DetailsProps = {
