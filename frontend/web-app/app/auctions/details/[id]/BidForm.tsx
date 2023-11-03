@@ -21,6 +21,13 @@ function BidForm({ auctionId, highBid }: BidFormProps) {
   const addBid = useBidStore((state) => state.addBid)
 
   function onSubmit(data: FieldValues) {
+    if (data.amount <= highBid) {
+      reset()
+      return toast.error(
+        'Bid must me at least $' + numberWithCommas(highBid + 1)
+      )
+    }
+
     placeBidForAuction(auctionId, +data.amount)
       .then((bid) => {
         if (bid.error) {
