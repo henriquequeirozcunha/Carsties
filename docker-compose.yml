@@ -105,7 +105,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=http://+:80
-      - ClientApp=http://app.carsties.com
+      - ClientApp=https://app.carsties.com
       - VIRTUAL_HOST=api.carsties.com
     networks:
       custom:
@@ -171,10 +171,12 @@ services:
     image: nginxproxy/nginx-proxy
     ports:
       - 80:80
+      - 443:443
     networks:
       custom:
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./devcerts:/etc/nginx/certs
 
 volumes:
   pgdata:
