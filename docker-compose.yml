@@ -1,3 +1,9 @@
+networks:
+  custom:
+    ipam:
+      config:
+        - subnet: 10.5.0.0/16
+
 services:
   postgres-carsties:
     image: postgres
@@ -7,6 +13,8 @@ services:
       - 5432:5432
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      custom:
 
   mongodb:
     image: mongo
@@ -17,12 +25,16 @@ services:
       - 27017:27017
     volumes:
       - mongodata:/var/lib/mongodb/data
+    networks:
+      custom:
 
   rabbitmq:
     image: rabbitmq:3-management-alpine
     ports:
       - 5672:5672
       - 15672:15672
+    networks:
+      custom:
 
   auction-svc:
     image: henriquequeirozcunha/auction-svc:latest
@@ -46,6 +58,8 @@ services:
     depends_on:
       - postgres-carsties
       - rabbitmq
+    networks:
+      custom:
 
   search-svc:
     image: henriquequeirozcunha/search-svc:latest
@@ -63,6 +77,8 @@ services:
     depends_on:
       - mongodb
       - rabbitmq
+    networks:
+      custom:
 
   identity-svc:
     image: henriquequeirozcunha/identity-svc:latest
@@ -74,9 +90,12 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - ConnectionStrings__DefaultConnection=Server=postgres-carsties:5432;User Id=postgres;Password=postgrespw;Database=identity
     ports:
-      - 5000:80
+      - 80:80
     depends_on:
       - postgres-carsties
+    networks:
+      custom:
+        ipv4_address: 10.5.0.200
 
   gateway-svc:
     image: henriquequeirozcunha/gateway-svc:latest
@@ -88,6 +107,8 @@ services:
       - ASPNETCORE_URLS=http://+:80
     ports:
       - 6001:80
+    networks:
+      custom:
 
   bid-svc:
     image: henriquequeirozcunha/bid-svc:latest
@@ -106,6 +127,8 @@ services:
     depends_on:
       - mongodb
       - rabbitmq
+    networks:
+      custom:
 
   notify-svc:
     image: henriquequeirozcunha/notify-svc:latest
@@ -120,6 +143,29 @@ services:
       - 7004:80
     depends_on:
       - rabbitmq
+    networks:
+      custom:
+
+  web-app:
+    image: henriquequeirozcunha/web-app:latest
+    build:
+      context: .
+      dockerfile: frontend/web-app/Dockerfile
+    volumes:
+      - /var/lib/web/data
+    ports:
+      - 3000:3000
+    extra_hosts:
+      - id.carsties.com:10.5.0.200
+    environment:
+      - NEXTAUTH_SECRET=nextsecret
+      - NEXTAUTH_URL=http://localhost:3000
+      - NEXTAUTH_URL_INTERNAL=http://web-app:3000
+      - API_URL=http://gateway-svc/
+      - IDENTITY_SERVER_URL=http://id.carsties.com
+      - NEXT_PUBLIC_NOTIFY_URL=http://gateway-svc/notifications
+    networks:
+      custom:
 
 volumes:
   pgdata:

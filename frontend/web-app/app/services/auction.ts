@@ -3,7 +3,7 @@
 import { Auction } from '@/models/auction'
 import { PaginatedResult } from '@/models/paginatedResult'
 import qs from 'query-string'
-import { fetchWrapper } from '@/lib/fetchWrapper'
+import { fetchWrapper } from '@/app/lib/fetchWrapper'
 import { FieldValues } from 'react-hook-form'
 import { revalidatePath } from 'next/cache'
 import { Bid } from '@/models/bid'
