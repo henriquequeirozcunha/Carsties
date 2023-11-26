@@ -33,7 +33,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: postgres-cluster-ip
+  name: postgres-clusterip
 spec:
   type: ClusterIP
   selector:
