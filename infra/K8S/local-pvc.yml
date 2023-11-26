@@ -1,0 +1,42 @@
+# Create Persistent Volume to PostGres
+# On the deployment it will be selected due "postgres-claim" term
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-claim
+spec:
+  resources:
+    requests:
+      storage: 200Mi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+
+---
+# Create Persistent Volume to RabbitMq
+# On the deployment it will be selected due "rabbit-claim" term
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: rabbit-claim
+spec:
+  resources:
+    requests:
+      storage: 200Mi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+---
+# Create Persistent Volume to MongoDB
+# On the deployment it will be selected due "mongo-claim" term
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-claim
+spec:
+  resources:
+    requests:
+      storage: 200Mi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
