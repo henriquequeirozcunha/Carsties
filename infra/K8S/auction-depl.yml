@@ -43,6 +43,7 @@ kind: Service
 metadata:
   name: auction-clusterip
 spec:
+  type: ClusterIP
   selector:
     app: auction-svc
   ports:
