@@ -18,6 +18,8 @@ spec:
           env:
             - name: ClientApp
               value: https://app.carsties.com
+            - name: IdentityServiceUrl
+              value: http://identity-svc # This will point to some external hosted service such as Digital Ocean DNS....
 
 ---
 apiVersion: v1
