@@ -1,0 +1,35 @@
+# THIS WAS CREATED TO CREATE A "VIRTUAL HOST" USING NGINX-INGRESS
+# IT WAS RAN THIS CODE BELOW TO CREATE THE CONTAINER WITH NGINX-INGRESS
+# kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.2/deploy/static/provider/cloud/deploy.yaml
+
+# THIS FILE CREATED THE HOSTS FOR "app.carsties.com" point to webapp-clusterip which is the NEXT APP
+# THIS FILE CREATED THE HOSTS FOR "api.carsties.com" point to gateway-clusterip which is the gateway to backend
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-svc
+  labels:
+    name: ingress-svc
+spec:
+  rules:
+    - host: app.carsties.com
+      http:
+        paths:
+          - pathType: Prefix
+            path: '/'
+            backend:
+              service:
+                name: webapp-clusterip
+                port:
+                  number: 3000
+    - host: api.carsties.com
+      http:
+        paths:
+          - pathType: Prefix
+            path: '/'
+            backend:
+              service:
+                name: gateway-clusterip
+                port:
+                  number: 80
