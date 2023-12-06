@@ -30,7 +30,7 @@ builder.Services.AddMassTransit(x =>
         cfg.Host(builder.Configuration["RabbitMq:Host"], "/", host =>
         {
             host.Username(builder.Configuration.GetValue("RabbitMq:Username", "guest"));
-            host.Username(builder.Configuration.GetValue("RabbitMq:Password", "guest"));
+            host.Password(builder.Configuration.GetValue("RabbitMq:Password", "guest"));
         });
 
         cfg.ReceiveEndpoint("search-auction-created", e =>
