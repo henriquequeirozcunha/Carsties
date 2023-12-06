@@ -16,7 +16,10 @@ spec:
           image: postgres
           env:
             - name: POSTGRES_PASSWORD
-              value: postgrespw
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: password
           ports:
             - containerPort: 5432
           volumeMounts:
@@ -29,7 +32,7 @@ spec:
 ---
 # Create a ClusterIP service in order to other pods see this service
 # Same as put the name of the service on DockerComponse such as http://auction-svc
-# action-svc is the "ClusterIP"
+# auction-svc is the "ClusterIP"
 apiVersion: v1
 kind: Service
 metadata:

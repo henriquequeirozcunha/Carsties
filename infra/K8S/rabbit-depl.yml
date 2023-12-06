@@ -16,9 +16,15 @@ spec:
           image: rabbitmq:3-management
           env:
             - name: RABBITMQ_DEFAULT_USER
-              value: rabbit
-            - name: RABBITMQ_DEFAULT_PASSWORD
-              value: rabbit
+              valueFrom:
+                secretKeyRef:
+                  name: rabbit-secret
+                  key: username
+            - name: RABBITMQ_DEFAULT_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: rabbit-secret
+                  key: password
           ports:
             - containerPort: 15672
               name: rbmq-mgmt-port
@@ -34,11 +40,11 @@ spec:
 ---
 # Create a ClusterIP service in order to other pods see this service
 # Same as put the name of the service on DockerComponse such as http://auction-svc
-# action-svc is the "ClusterIP"
+# auction-svc is the "ClusterIP"
 apiVersion: v1
 kind: Service
 metadata:
-  name: rabbit-cluster-ip
+  name: rabbit-clusterip
 spec:
   type: ClusterIP
   selector:

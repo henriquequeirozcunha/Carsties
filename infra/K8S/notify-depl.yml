@@ -17,11 +17,17 @@ spec:
           imagePullPolicy: Never
           env:
             - name: RabbitMq__Host
-              value: rabbit-cluster-ip
+              value: rabbit-clusterip
             - name: RabbitMq__Username
-              value: rabbit
+              valueFrom:
+                secretKeyRef:
+                  name: notify-secret
+                  key: rabbitUn
             - name: RabbitMq__Password
-              value: rabbit
+              valueFrom:
+                secretKeyRef:
+                  name: notify-secret
+                  key: rabbitPw
 
 ---
 apiVersion: v1
