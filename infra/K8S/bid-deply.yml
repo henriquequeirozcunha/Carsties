@@ -14,7 +14,7 @@ spec:
       containers:
         - name: bid-svc
           image: henriquequeirozcunha/bid-svc
-          imagePullPolicy: Never
+          imagePullPolicy: Always # NOTE: Change it to Never if running locally
           env:
             - name: RabbitMq__Host
               value: rabbit-clusterip

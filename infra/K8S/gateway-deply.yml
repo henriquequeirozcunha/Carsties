@@ -14,7 +14,7 @@ spec:
       containers:
         - name: gateway-svc
           image: henriquequeirozcunha/gateway-svc
-          imagePullPolicy: Never
+          imagePullPolicy: Always # NOTE: Change it to Never if running locally
           env:
             - name: ClientApp
               value: https://app.carsties.com
