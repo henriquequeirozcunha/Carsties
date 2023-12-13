@@ -9,7 +9,7 @@ export const authOptions: NextAuthOptions = {
     DuendeIDS6Provider({
       id: 'id-server',
       clientId: 'nextApp',
-      clientSecret: 'secret',
+      clientSecret: process.env.CLIENT_SECRET!,
       issuer: process.env.IDENTITY_SERVER_URL,
       authorization: {
         params: {

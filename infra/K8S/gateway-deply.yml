@@ -17,7 +17,7 @@ spec:
           imagePullPolicy: Always # NOTE: Change it to Never if running locally
           env:
             - name: ClientApp
-              value: https://app.carsties.com
+              value: https://app.carsties.com # NOTE: this is the REAL DNS. TO work a domain has to be purchased, point to a load balancer on Digital Ocean.
             - name: IdentityServiceUrl
               value: http://identity-svc # This will point to some external hosted service such as Digital Ocean DNS....
 
