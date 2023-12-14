@@ -2,10 +2,17 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ingress-svc
+  annotations:
+    cert-manager.io/issuer: 'letsencrypt-staging'
   labels:
     name: ingress-svc
 spec:
   ingressClassName: nginx
+  tls:
+    - hosts:
+        - app.carsties.com # Configure Domain Name and point to Load Balancer on DigitalOcean (Look class n 235 of the course)
+        - api.carsties.com # Configure Domain Name and point to Load Balancer on DigitalOcean (Look class n 235 of the course)
+      secretName: carsties-tls
   rules:
     - host: app.carsties.com # NOTE: Configure Domain Name and point to Load Balancer on DigitalOcean (Look class n 235 of the course)
       http:
