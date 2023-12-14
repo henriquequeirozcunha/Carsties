@@ -105,7 +105,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=http://+:80
-      - ClientApp=https://app.carsties.com
+      - ClientApp=http://app.carsties.com # NOTE: add https to turn on https
       - VIRTUAL_HOST=api.carsties.com
     networks:
       custom:
@@ -164,6 +164,7 @@ services:
       - NEXT_PUBLIC_NOTIFY_URL=http://gateway-svc/notifications
       - VIRTUAL_HOST=app.carsties.com
       - VIRTUAL_PORT=3000
+      - CLIENT_SECRET=secret
     networks:
       custom:
 
